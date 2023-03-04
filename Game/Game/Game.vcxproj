@@ -133,12 +133,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BadWords.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Letter.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BadWords.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Letter.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="utils.h" />
   </ItemGroup>

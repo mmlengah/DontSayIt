@@ -4,6 +4,8 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 #include "Player.h"
+#include "Letter.h"
+#include "BadWords.h"
 
 class Game
 {
@@ -23,5 +25,7 @@ private:
 	SDL_Renderer* renderer = nullptr;
 
 	Player* p;
+	BadWords* bw;
+
 };
 

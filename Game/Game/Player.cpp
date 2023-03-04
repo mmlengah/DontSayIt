@@ -5,8 +5,8 @@
 
 Player::Player(int width, int height)
 {
-	speed = 5;
-	position = util::Vector2();
+	speed = 20;
+	position = util::Vector2(0, (float) height);
 	
 	playerRect.x = (int) position.x;
 	playerRect.y = (int) position.y;
@@ -30,6 +30,13 @@ bool Player::init(SDL_Renderer* r)
 	//load image in
 	for (int i = 0; i < 4; i++) {
 		if (!util::loadImage(("Assets/Player/HandsDown/Moving_sprite_" + std::to_string(i+1) + ".png").c_str(), 
+			r, &(textures[i]))) {
+			return false;
+		}
+	}
+	//load other images in
+	for (int i = 4; i < 8; i++) {
+		if (!util::loadImage(("Assets/Player/HandsUp/Moving_sprite_arms_up_" + std::to_string(i - 3) + ".png").c_str(),
 			r, &(textures[i]))) {
 			return false;
 		}
@@ -77,10 +84,16 @@ void Player::PlayerInput(SDL_Event* e)
 
 void Player::Animation()
 {
+	//arms down = 0, 1, 2, 3;
+	//arms up 4, 5, 6, 7;
+	int limit = 3;
+	if (holding) { limit += 4; }
 	if (playerRect.x != (int)position.x || playerRect.y != (int)position.y) {
 		animationFrame += 1;
-		if (animationFrame > 3) {
-			animationFrame = 0;
+		if (animationFrame > limit) {
+			if (holding) { animationFrame = 4; }
+			else { animationFrame = 0; }
+			
 		}
 	}
 }

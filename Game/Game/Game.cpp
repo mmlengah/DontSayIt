@@ -9,6 +9,7 @@ const int SCREEN_HEIGHT = 400;
 Game::Game()
 {
 	p = new Player(SCREEN_WIDTH, SCREEN_HEIGHT);
+	bw = new BadWords();
 }
 
 bool Game::Init()
@@ -57,7 +58,8 @@ bool Game::Init()
 
 	//init the player
 	p->init(renderer);
-	
+	bw->Init();
+
 	return true;
 }
 
@@ -74,10 +76,11 @@ void Game::Update()
 
 void Game::Draw()
 {
-	SDL_SetRenderDrawColor(renderer, 255, 123, 35, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 
 	p->Draw(renderer);
+	bw->Draw(renderer);
 
 	SDL_RenderPresent(renderer);
 }

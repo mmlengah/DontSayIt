@@ -19,6 +19,7 @@ private:
 	void Movement(int width, int height);
 
 	//variables
+	bool holding = false;
 	SDL_Rect playerRect;
 	std::vector<SDL_Texture*> textures;
 	int animationFrame;
