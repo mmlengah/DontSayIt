@@ -13,6 +13,7 @@ Game::Game()
 
 bool Game::Init()
 {
+	//sdl2
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
 		std::cout << "could not initialize SDL2!" << std::endl;
 		std::cout << SDL_GetError() << std::endl;
@@ -43,6 +44,19 @@ bool Game::Init()
 	SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0, 0, 0));
 	SDL_UpdateWindowSurface(window);
 
+	//init ttf
+	if (TTF_Init() != 0) {
+		std::cout << SDL_GetError() << std::endl;
+	}
+
+	//init mixer
+	if (Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) == -1)
+	{
+		std::cout << SDL_GetError() << std::endl;
+	}
+
+	//init the player
+	p->init(renderer);
 	
 	return true;
 }
@@ -55,12 +69,12 @@ bool Game::KeepAlive()
 
 void Game::Update()
 {
-	
+	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT);
 }
 
 void Game::Draw()
 {
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(renderer, 255, 123, 35, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 
 	p->Draw(renderer);

@@ -1,12 +1,2 @@
-﻿  Game.cpp
-D:\GitHub\DontSayIt\Game\Game\utils.h(25,4): error C2440: 'return': cannot convert from 'const util::Vector2' to 'util::Vector2'
-D:\GitHub\DontSayIt\Game\Game\utils.h(25,4): message : Cannot copy construct struct 'util::Vector2' due to ambiguous copy constructors or no available copy constructor
-  main.cpp
-D:\GitHub\DontSayIt\Game\Game\utils.h(25,4): error C2440: 'return': cannot convert from 'const util::Vector2' to 'util::Vector2'
-D:\GitHub\DontSayIt\Game\Game\utils.h(25,4): message : Cannot copy construct struct 'util::Vector2' due to ambiguous copy constructors or no available copy constructor
-  Player.cpp
-D:\GitHub\DontSayIt\Game\Game\utils.h(25,4): error C2440: 'return': cannot convert from 'const util::Vector2' to 'util::Vector2'
-D:\GitHub\DontSayIt\Game\Game\utils.h(25,4): message : Cannot copy construct struct 'util::Vector2' due to ambiguous copy constructors or no available copy constructor
-D:\GitHub\DontSayIt\Game\Game\Player.cpp(11,11): error C2039: 'log': is not a member of 'util::Vector2'
-D:\GitHub\DontSayIt\Game\Game\utils.h(8,9): message : see declaration of 'util::Vector2'
-  Generating Code...
+﻿  Player.cpp
+  Game.vcxproj -> D:\GitHub\DontSayIt\Game\x64\Debug\Game.exe
