@@ -1,9 +1,13 @@
 #include "Player.h"
+#include <iostream>
+
+
 
 Player::Player(int width, int height)
 {
 	speed = 5;
 	position = util::Vector2();
+	
 	playerRect.x = (int) position.x;
 	playerRect.y = (int) position.y;
 	playerRect.w = (int) (width * 0.1);
