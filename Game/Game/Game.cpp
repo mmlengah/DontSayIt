@@ -8,6 +8,7 @@ const int SCREEN_HEIGHT = 400;
 
 Game::Game()
 {
+	srand((unsigned int)time(NULL));
 	p = new Player(SCREEN_WIDTH, SCREEN_HEIGHT);
 	bw = new BadWords();
 }
@@ -76,8 +77,8 @@ bool Game::KeepAlive()
 void Game::Update()
 {
 	deltaTime = SetDeltaTime();
-	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime);
-	bw->Update(&deltaTime);
+	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime, bw->GetLetterRects());
+	bw->Update(&SCREEN_WIDTH, &SCREEN_HEIGHT, &deltaTime, p->GetRect(), p->GetHolding());
 }
 
 void Game::Draw()

@@ -52,10 +52,11 @@ void Player::Draw(SDL_Renderer* r)
 	SDL_RenderCopy(r, textures[animationFrame], NULL, &playerRect);
 }
 
-void Player::Update(int width, int height, float* dt)
+void Player::Update(int width, int height, float* dt, std::vector<SDL_Rect> letterRects)
 {
 	Movement(width, height, dt);
-	
+	HoldLetter();
+	Collision(letterRects);
 }
 
 void Player::PlayerKeyDown(SDL_Event* e)
@@ -103,6 +104,16 @@ void Player::PlayerKeyUp(SDL_Event* e)
 		keyStates[3] = false;
 		break;
 	}
+}
+
+SDL_Rect Player::GetRect()
+{
+	return playerRect;
+}
+
+bool* Player::GetHolding()
+{
+	return &holding;
 }
 
 void Player::Animation()
@@ -163,6 +174,22 @@ void Player::Movement(int width, int height, float* dt)
 	if (playerRect.y >= height - playerRect.h) {
 		playerRect.y = (int)(height - playerRect.h);
 		position.y = (float)(height - playerRect.h);
+	}
+	
+}
+
+void Player::HoldLetter()
+{
+	if (holding) { return; }
+}
+
+void Player::Collision(std::vector<SDL_Rect> letterRects)
+{
+	if (holding) { return; }
+	for (int i = 0; i < letterRects.size(); i++) {
+		if (SDL_HasIntersection(&playerRect, &letterRects[i])) {
+			holding = true;
+		}
 	}
 	
 }

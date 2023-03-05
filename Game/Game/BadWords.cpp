@@ -41,6 +41,15 @@ void BadWords::RemoveWord()
 	timer = SDL_GetTicks();
 }
 
+std::vector<SDL_Rect> BadWords::GetLetterRects()
+{
+	std::vector<SDL_Rect> n;
+	for (int i = 0; i < letters.size(); i++) {
+		n.push_back(letters[i]->GetRect());
+	}
+	return n;
+}
+
 bool BadWords::Init(const int* width)
 {
 	font = TTF_OpenFont("Assets/Fonts/vcr_osd_mono/VCR_OSD_MONO_1.001.ttf", 21);
@@ -53,7 +62,7 @@ bool BadWords::Init(const int* width)
 	return true;
 }
 
-void BadWords::Update(float* dt)
+void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect playerRect, bool* h)
 {
 	if (SDL_GetTicks() > timer && !fall) {
 		fall = true;
@@ -63,7 +72,10 @@ void BadWords::Update(float* dt)
 	}
 
 	for(int i = 0; i < letters.size(); i++){
-		letters[i]->update(dt);
+		letters[i]->update(width, height, dt, playerRect);
+		if (!*h) {
+			letters[i]->Collision(playerRect);
+		}
 	}
 }
 
