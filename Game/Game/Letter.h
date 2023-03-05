@@ -5,7 +5,7 @@
 class Letter
 {
 public:
-	Letter(int x, int y);
+	Letter(int x, int y, int w, int h);
 	void draw(SDL_Renderer* r, TTF_Font* font, const char* letter);
 private:
 	

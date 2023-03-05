@@ -1,6 +1,6 @@
 #include "Letter.h"
 
-Letter::Letter(int x, int y)
+Letter::Letter(int x, int y, int w, int h)
 {
 	white.r = 255;
 	white.b = 255;
@@ -9,8 +9,8 @@ Letter::Letter(int x, int y)
 
 	letterRect.x = x;
 	letterRect.y = y;
-	letterRect.w = 50;
-	letterRect.h = 50;
+	letterRect.w = w;
+	letterRect.h = h;
 }
 
 

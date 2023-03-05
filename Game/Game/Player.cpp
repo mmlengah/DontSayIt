@@ -48,11 +48,7 @@ bool Player::init(SDL_Renderer* r)
 }
 
 void Player::Draw(SDL_Renderer* r)
-{
-	//make the rect white
-	//SDL_SetRenderDrawColor(r, 255, 255, 255, SDL_ALPHA_OPAQUE);
-	//SDL_RenderFillRect(r, &playerRect);
-	//render it to the screen
+{	
 	SDL_RenderCopy(r, textures[animationFrame], NULL, &playerRect);
 }
 

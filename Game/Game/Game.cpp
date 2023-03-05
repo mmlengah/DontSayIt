@@ -58,7 +58,7 @@ bool Game::Init()
 
 	//init the player
 	p->init(renderer);
-	bw->Init();
+	bw->Init(&SCREEN_WIDTH);
 
 	return true;
 }
@@ -88,6 +88,9 @@ void Game::Draw()
 void Game::Clean()
 {
 	delete p;
+
+	bw->RemoveWord();
+	delete bw;
 
 	SDL_DestroyWindow(window);
 	SDL_Quit();
