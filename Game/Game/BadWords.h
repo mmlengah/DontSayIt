@@ -16,6 +16,8 @@ public:
 	void SetUpWord(const int* width);
 	void RemoveWord();
 	std::vector<SDL_Rect> GetLetterRects();
+	std::vector<bool*> GetIsFollowingPlayer();
+	std::vector<bool*> GetIsFalling();
 private:
 	void ReadFile(const char* filepath, std::unordered_map<std::string, std::string>* words);
 	std::unordered_map<std::string, std::string> safeWords;
@@ -24,12 +26,12 @@ private:
 
 	std::vector<Letter*> letters;
 	std::vector<SDL_Rect> letterHolder;
-	std::vector<SDL_Rect> letterRects;
-
+	std::vector<std::vector<int>> startingLocations;
 	std::string currentWord;
 
 	Uint32 now;
 	Uint32 timer;
 	bool fall = false;
+	bool stopHolding = false;
 };
 

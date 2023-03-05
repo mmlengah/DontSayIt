@@ -11,7 +11,7 @@ public:
 	~Player();
 	bool init(SDL_Renderer* r);
 	void Draw(SDL_Renderer* r);
-	void Update(int width, int height, float* dt, std::vector<SDL_Rect> letterRects);
+	void Update(int width, int height, float* dt, std::vector<SDL_Rect> letterRects, std::vector<bool*> isFollowPlayer, std::vector<bool*> isFalling);
 	void PlayerKeyDown(SDL_Event* e);
 	void PlayerKeyUp(SDL_Event* e);
 	SDL_Rect GetRect();
@@ -21,7 +21,7 @@ private:
 	void Animation();
 	void Movement(int width, int height, float* dt);
 	void HoldLetter();
-	void Collision(std::vector<SDL_Rect> letterRects);
+	void Collision(std::vector<SDL_Rect> letterRects, std::vector<bool*> isFollowPlayer, std::vector<bool*> isFalling);
 	//variables
 	bool holding = false;
 	bool keyStates[4] = { false, false, false, false };

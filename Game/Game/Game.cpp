@@ -1,7 +1,7 @@
 #include "game.h"
 #include <stdio.h>
 #include <iostream>
-
+#include <ctime>
 
 const int SCREEN_WIDTH = 600;
 const int SCREEN_HEIGHT = 400;
@@ -77,7 +77,7 @@ bool Game::KeepAlive()
 void Game::Update()
 {
 	deltaTime = SetDeltaTime();
-	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime, bw->GetLetterRects());
+	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime, bw->GetLetterRects(), bw->GetIsFollowingPlayer(), bw->GetIsFalling());
 	bw->Update(&SCREEN_WIDTH, &SCREEN_HEIGHT, &deltaTime, p->GetRect(), p->GetHolding());
 }
 

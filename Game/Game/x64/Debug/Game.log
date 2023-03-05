@@ -1,2 +1,7 @@
-﻿  Letter.cpp
+﻿  BadWords.cpp
+  Game.cpp
+  Letter.cpp
+  Player.cpp
+  main.cpp
+  Generating Code...
   Game.vcxproj -> D:\GitHub\DontSayIt\Game\x64\Debug\Game.exe

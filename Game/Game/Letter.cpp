@@ -14,7 +14,7 @@ Letter::Letter(int x, int y, int w, int h)
 
 	isFalling = false;
 
-	speed = (float) (rand() % 6 + 10) / 25;
+	speed = (float) (rand() % 25 + 25) / 25;
 }
 
 void Letter::draw(SDL_Renderer* r, TTF_Font* font, const char* letter)
@@ -89,5 +89,22 @@ void Letter::Collision(SDL_Rect r)
 	if (isFollowPlayer) { return; }
 	if (SDL_HasIntersection(&letterRect, &r)) {
 		isFollowPlayer = true;
+		isFalling = false;
 	}
+}
+
+void Letter::SetLocation(int x, int y)
+{
+	letterRect.x = x;
+	letterRect.y = y;
+}
+
+bool* Letter::GetIsFollowingPlayer()
+{
+	return &isFollowPlayer;
+}
+
+bool* Letter::GetIsFalling()
+{
+	return &isFalling;
 }

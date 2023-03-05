@@ -52,11 +52,11 @@ void Player::Draw(SDL_Renderer* r)
 	SDL_RenderCopy(r, textures[animationFrame], NULL, &playerRect);
 }
 
-void Player::Update(int width, int height, float* dt, std::vector<SDL_Rect> letterRects)
+void Player::Update(int width, int height, float* dt, std::vector<SDL_Rect> letterRects, std::vector<bool*> isFollowPlayer, std::vector<bool*> isFalling)
 {
 	Movement(width, height, dt);
 	HoldLetter();
-	Collision(letterRects);
+	Collision(letterRects, isFollowPlayer, isFalling);
 }
 
 void Player::PlayerKeyDown(SDL_Event* e)
@@ -183,13 +183,15 @@ void Player::HoldLetter()
 	if (holding) { return; }
 }
 
-void Player::Collision(std::vector<SDL_Rect> letterRects)
+void Player::Collision(std::vector<SDL_Rect> letterRects, std::vector<bool*> isFollowPlayer, std::vector<bool*> isFalling)
 {
 	if (holding) { return; }
 	for (int i = 0; i < letterRects.size(); i++) {
 		if (SDL_HasIntersection(&playerRect, &letterRects[i])) {
 			holding = true;
+			animationFrame = 4;
+			*isFollowPlayer[i] = true;
+			*isFalling[i] = false;
 		}
-	}
-	
+	}	
 }

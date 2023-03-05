@@ -13,6 +13,9 @@ public:
 	SDL_Rect* GetRectP();
 	void SetFollowPlayer(bool b);
 	void Collision(SDL_Rect r);
+	void SetLocation(int x, int y);
+	bool* GetIsFollowingPlayer();
+	bool* GetIsFalling();
 private:	
 	void Falling(const int* width, const int* height, float* dt);
 	void FollowPlayer(SDL_Rect r);
