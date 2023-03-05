@@ -5,7 +5,7 @@
 
 Player::Player(int width, int height)
 {
-	speed = 1;
+	speed = 0.2f;
 	position = util::Vector2(0, (float) height);
 	
 	playerRect.x = (int) position.x;
@@ -52,9 +52,9 @@ void Player::Draw(SDL_Renderer* r)
 	SDL_RenderCopy(r, textures[animationFrame], NULL, &playerRect);
 }
 
-void Player::Update(int width, int height)
+void Player::Update(int width, int height, float* dt)
 {
-	Movement(width, height);
+	Movement(width, height, dt);
 	
 }
 
@@ -121,20 +121,20 @@ void Player::Animation()
 	}
 }
 
-void Player::Movement(int width, int height)
+void Player::Movement(int width, int height, float* dt)
 {
 	//move player
 	if (keyStates[0]) {
-		position.y -= speed;
+		position.y -= speed * *dt;
 	}
 	if (keyStates[1]) {
-		position.y += speed;
+		position.y += speed * *dt;
 	}
 	if (keyStates[2]) {
-		position.x -= speed;
+		position.x -= speed * *dt;
 	}
 	if (keyStates[3]) {
-		position.x += speed;
+		position.x += speed * *dt;
 	}
 
 	if (keyStates[3] || keyStates[2] || keyStates[1] || keyStates[0]) {
@@ -142,6 +142,7 @@ void Player::Movement(int width, int height)
 		Animation();
 	}
 
+	
 	playerRect.x = (int)position.x;
 	playerRect.y = (int)position.y;
 

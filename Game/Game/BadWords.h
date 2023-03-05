@@ -11,6 +11,7 @@ public:
 	BadWords();
 	~BadWords();
 	bool Init(const int* width);
+	void Update(float* dt);
 	void Draw(SDL_Renderer* r);
 	void SetUpWord(const int* width);
 	void RemoveWord();
@@ -24,5 +25,9 @@ private:
 	std::vector<SDL_Rect> letterHolder;
 
 	std::string currentWord;
+
+	Uint32 now;
+	Uint32 timer;
+	bool fall = false;
 };
 

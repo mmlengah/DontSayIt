@@ -11,6 +11,13 @@ Letter::Letter(int x, int y, int w, int h)
 	letterRect.y = y;
 	letterRect.w = w;
 	letterRect.h = h;
+
+	isFalling = false;
+}
+
+void Letter::update(float* dt)
+{
+	falling(dt);
 }
 
 
@@ -22,4 +29,15 @@ void Letter::draw(SDL_Renderer* r, TTF_Font* font, const char* letter)
 
 	SDL_DestroyTexture(textTexture);
 	SDL_FreeSurface(textImage);
+}
+
+void Letter::SetFalling(bool f)
+{
+	isFalling = f;
+}
+
+void Letter::falling(float* dt)
+{
+	if (!isFalling) { return; }
+	letterRect.y += (int) (1 * *dt);
 }

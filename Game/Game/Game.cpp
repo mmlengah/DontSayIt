@@ -60,6 +60,10 @@ bool Game::Init()
 	p->init(renderer);
 	bw->Init(&SCREEN_WIDTH);
 
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
+	float deltaTime = 0;
+
 	return true;
 }
 
@@ -71,7 +75,9 @@ bool Game::KeepAlive()
 
 void Game::Update()
 {
-	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT);
+	deltaTime = SetDeltaTime();
+	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime);
+	bw->Update(&deltaTime);
 }
 
 void Game::Draw()
@@ -94,6 +100,13 @@ void Game::Clean()
 
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+}
+
+float Game::SetDeltaTime()
+{
+	LAST = NOW;
+	NOW = SDL_GetPerformanceCounter();
+	return (float)((NOW - LAST) * 1000 / (float)SDL_GetPerformanceFrequency());
 }
 
 bool Game::EventHandler()

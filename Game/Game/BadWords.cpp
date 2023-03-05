@@ -11,10 +11,7 @@ BadWords::BadWords()
 
 BadWords::~BadWords()
 {
-	for (int i = 0; i < letters.size(); i++) {
-		delete letters[i];
-	}
-	letters.resize(0);
+	RemoveWord();
 }
 
 void BadWords::SetUpWord(const int* width)
@@ -30,6 +27,8 @@ void BadWords::SetUpWord(const int* width)
 		tempRect.h = 5;
 		letterHolder.push_back(tempRect);
 	}
+	now = SDL_GetTicks();
+	timer = now + 2000; //add 2 seconds
 }
 
 void BadWords::RemoveWord()
@@ -38,6 +37,8 @@ void BadWords::RemoveWord()
 		delete letters[i];
 	}
 	letters.resize(0);
+	fall = false;
+	timer = SDL_GetTicks();
 }
 
 bool BadWords::Init(const int* width)
@@ -52,9 +53,22 @@ bool BadWords::Init(const int* width)
 	return true;
 }
 
+void BadWords::Update(float* dt)
+{
+	if (SDL_GetTicks() > timer && !fall) {
+		fall = true;
+		for (int i = 0; i < letters.size(); i++) {
+			letters[i]->SetFalling(fall);
+		}
+	}
+
+	for(int i = 0; i < letters.size(); i++){
+		letters[i]->update(dt);
+	}
+}
+
 void BadWords::Draw(SDL_Renderer* r)
 {
-	//letters[0]->draw(r, font, currentWord.c_str());
 	for (int i = 0; i < currentWord.size(); i++) {
 		std::string s(1, currentWord[i]);
 		letters[i]->draw(r, font, s.c_str());
