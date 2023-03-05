@@ -92,9 +92,6 @@ void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect p
 
 	for(int i = 0; i < letters.size(); i++){
 		letters[i]->update(width, height, dt, playerRect);
-		/*if (!*h) {
-			letters[i]->Collision(playerRect);
-		}*/
 	}
 
 	if (SDL_GetTicks() > timer + 500 && fall) {
@@ -102,21 +99,24 @@ void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect p
 			for (int j = 0; j < letterHolder.size(); j++) {
 				if (SDL_HasIntersection(letters[i]->GetRectP(), &letterHolder[j])) {
 					letters[i]->SetFollowPlayer(false);
-					if (startingLocations[j][1] == 350) {
-						letters[i]->SetLocation(startingLocations[i][0], 400-letters[i]->GetRect().h);
-					}
-					else {
-						letters[i]->SetLocation(startingLocations[j][0], startingLocations[j][1]);
-						startingLocations[j][1] = 350;
-					}
-					
-					
+					letters[i]->SetLocation(startingLocations[j][0], startingLocations[j][1]);
 					*h = false;
 				}
 			}
 			
 		}
+
+		for (int i = 0; i < letters.size(); i++) {
+			for (int j = i + 1; j < letters.size(); j++) {
+				if (SDL_HasIntersection(letters[i]->GetRectP(), letters[j]->GetRectP())) {
+					letters[i]->SetLocation(startingLocations[i][0], 400 - letters[i]->GetRect().h);
+					*h = false;
+				}
+			}
+		}
 	}
+
+	
 
 }
 
