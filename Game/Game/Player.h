@@ -12,7 +12,8 @@ public:
 	bool init(SDL_Renderer* r);
 	void Draw(SDL_Renderer* r);
 	void Update(int width, int height);
-	void PlayerInput(SDL_Event* e);
+	void PlayerKeyDown(SDL_Event* e);
+	void PlayerKeyUp(SDL_Event* e);
 private:
 	//functions
 	void Animation();
@@ -20,10 +21,11 @@ private:
 
 	//variables
 	bool holding = false;
+	bool keyStates[4] = { false, false, false, false };
 	SDL_Rect playerRect;
 	std::vector<SDL_Texture*> textures;
 	int animationFrame;
-	int speed;
+	float speed;
 	util::Vector2 position;
 };
 

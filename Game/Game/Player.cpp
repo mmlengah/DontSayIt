@@ -5,7 +5,7 @@
 
 Player::Player(int width, int height)
 {
-	speed = 20;
+	speed = 1;
 	position = util::Vector2(0, (float) height);
 	
 	playerRect.x = (int) position.x;
@@ -16,6 +16,8 @@ Player::Player(int width, int height)
 	for (int i = 0; i < 8; i++) {
 		textures.push_back(nullptr);
 	}
+
+	animationFrame = 0;
 }
 
 Player::~Player()
@@ -60,26 +62,51 @@ void Player::Update(int width, int height)
 	
 }
 
-void Player::PlayerInput(SDL_Event* e)
+void Player::PlayerKeyDown(SDL_Event* e)
 {
 	switch (e->key.keysym.scancode) {
+	case SDL_SCANCODE_UP:
 	case SDL_SCANCODE_W:
-		position.y -= speed;
+		keyStates[0] = true;
 		break;
+	case SDL_SCANCODE_DOWN:
 	case SDL_SCANCODE_S:
-		position.y += speed;
+		keyStates[1] = true;
 		break;
+	case SDL_SCANCODE_LEFT:
 	case SDL_SCANCODE_A:
-		position.x -= speed;
+		keyStates[2] = true;
 		break;
+	case SDL_SCANCODE_RIGHT:
 	case SDL_SCANCODE_D:
-		position.x += speed;
+		keyStates[3] = true;
 		break;
 	}
 
-	//animate when moving
-	Animation();
 	
+	
+}
+
+void Player::PlayerKeyUp(SDL_Event* e)
+{
+	switch (e->key.keysym.scancode) {
+	case SDL_SCANCODE_UP:
+	case SDL_SCANCODE_W:
+		keyStates[0] = false;
+		break;
+	case SDL_SCANCODE_DOWN:
+	case SDL_SCANCODE_S:
+		keyStates[1] = false;
+		break;
+	case SDL_SCANCODE_LEFT:
+	case SDL_SCANCODE_A:
+		keyStates[2] = false;
+		break;
+	case SDL_SCANCODE_RIGHT:
+	case SDL_SCANCODE_D:
+		keyStates[3] = false;
+		break;
+	}
 }
 
 void Player::Animation()
@@ -100,9 +127,30 @@ void Player::Animation()
 
 void Player::Movement(int width, int height)
 {
+	//move player
+	if (keyStates[0]) {
+		position.y -= speed;
+	}
+	if (keyStates[1]) {
+		position.y += speed;
+	}
+	if (keyStates[2]) {
+		position.x -= speed;
+	}
+	if (keyStates[3]) {
+		position.x += speed;
+	}
+
+	if (keyStates[3] || keyStates[2] || keyStates[1] || keyStates[0]) {
+		//animate when moving
+		Animation();
+	}
+
 	playerRect.x = (int)position.x;
 	playerRect.y = (int)position.y;
 
+
+	//keep player in bounds
 	if (playerRect.x <= 0) {
 		playerRect.x = 0;
 		position.x = 0;		

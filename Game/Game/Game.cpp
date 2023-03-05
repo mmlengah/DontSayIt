@@ -101,12 +101,12 @@ bool Game::EventHandler()
 			return false;
 		}
 		else if (ev.type == SDL_KEYDOWN) {
-			p->PlayerInput(&ev);
+			p->PlayerKeyDown(&ev);
 			return QuitButton(&ev);
 			
 		}
 		else if (ev.type == SDL_KEYUP) {
-
+			p->PlayerKeyUp(&ev);
 		}
 	}
 
