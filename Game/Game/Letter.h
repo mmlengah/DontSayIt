@@ -11,12 +11,9 @@ public:
 	void draw(SDL_Renderer* r, TTF_Font* font, const char* letter);
 	void SetFalling(bool f);
 	SDL_Rect GetRect();
-	SDL_Rect* GetRectP();
 	void SetFollowPlayer(bool b);
-	void Collision(SDL_Rect r);
+	void CollidedWithPlayer();
 	void SetLocation(int x, int y);
-	bool* GetIsFollowingPlayer();
-	bool* GetIsFalling();
 	void SetPlaced(bool b);
 	bool GetPlaced();
 private:	

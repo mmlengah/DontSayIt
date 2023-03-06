@@ -52,11 +52,9 @@ void Player::Draw(SDL_Renderer* r)
 	SDL_RenderCopy(r, textures[animationFrame], NULL, &playerRect);
 }
 
-void Player::Update(int width, int height, float* dt, std::vector<SDL_Rect> letterRects, std::vector<bool*> isFollowPlayer, std::vector<bool*> isFalling)
+void Player::Update(int width, int height, float* dt)
 {
 	Movement(width, height, dt);
-	HoldLetter();
-	Collision(letterRects, isFollowPlayer, isFalling);
 }
 
 void Player::PlayerKeyDown(SDL_Event* e)
@@ -106,9 +104,9 @@ void Player::PlayerKeyUp(SDL_Event* e)
 	}
 }
 
-SDL_Rect* Player::GetRect()
+SDL_Rect Player::GetRect()
 {
-	return &playerRect;
+	return playerRect;
 }
 
 float* Player::GetPosY()
@@ -116,9 +114,22 @@ float* Player::GetPosY()
 	return &position.y;
 }
 
-bool* Player::GetHolding()
+bool Player::GetHolding()
 {
-	return &holding;
+	return holding;
+}
+
+void Player::StopHolding()
+{
+	holding = false;
+	animationFrame = 0;
+}
+
+void Player::collidedWithLetter()
+{
+	if (holding) { return; }
+	holding = true;
+	animationFrame = 4;
 }
 
 void Player::Animation()
@@ -183,20 +194,3 @@ void Player::Movement(int width, int height, float* dt)
 	
 }
 
-void Player::HoldLetter()
-{
-	if (holding) { return; }
-}
-
-void Player::Collision(std::vector<SDL_Rect> letterRects, std::vector<bool*> isFollowPlayer, std::vector<bool*> isFalling)
-{
-	if (holding) { return; }
-	for (int i = 0; i < letterRects.size(); i++) {
-		if (SDL_HasIntersection(&playerRect, &letterRects[i])) {
-			holding = true;
-			animationFrame = 4;
-			*isFollowPlayer[i] = true;
-			*isFalling[i] = false;
-		}
-	}	
-}

@@ -1,7 +1,0 @@
-if (letters[i]->GetPlaced() && letters[i]->GetIsFollowingPlayer()) {
-						letters[i]->SetLocation(startingLocations[j][0], 350);
-						letters[i]->SetFollowPlayer(false);
-						letters[i]->SetPlaced(false);
-						createdWord[j] = '_';
-						*h = false;
-					}

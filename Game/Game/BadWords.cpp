@@ -21,6 +21,7 @@ void BadWords::SetUpWord(const int* width)
 	for (int i = 0; i < currentWord.size(); i++) {
 		createdWord += "_";
 		startingLocations.push_back({ i * dist, 0 });
+		isSomeoneOnMe.push_back(-1);
 		letters.push_back(new Letter(i * dist, 0, 1 * dist, (int)(dist / 1.5)));
 		SDL_Rect tempRect{};
 		tempRect.x = i * dist + 5;
@@ -44,6 +45,52 @@ void BadWords::RemoveWord()
 	timer = SDL_GetTicks();
 }
 
+void BadWords::LetterCollidedWithPlayer(int i)
+{
+	letters[i]->CollidedWithPlayer();
+}
+
+void BadWords::LetterCollidedWithHolder(int i, int j)
+{
+	letters[i]->SetFollowPlayer(false);
+	letters[i]->SetLocation(startingLocations[j][0], startingLocations[j][1]);
+	letters[i]->SetPlaced(true);
+	isSomeoneOnMe[j] = i;
+	createdWord[j] = currentWord[i];
+#if _DEBUG
+	std::cout << createdWord << std::endl;
+#endif 						
+}
+
+void BadWords::SendLetterBack(int i)
+{	
+	int j = isSomeoneOnMe[i];
+	letters[j]->SetFollowPlayer(false);
+	letters[j]->SetPlaced(false);
+	letters[j]->SetLocation(startingLocations[j][0], 400 - letters[j]->GetRect().h);
+	isSomeoneOnMe[i] = -1;
+	createdWord[i] = '_';
+#if _DEBUG
+	std::cout << createdWord << std::endl;
+#endif 		
+}
+
+bool BadWords::CanPlaceWords()
+{
+	return (SDL_GetTicks() > timer + 500 && fall);
+}
+
+bool BadWords::IsLetterPlaced(int i)
+{
+	return letters[i]->GetPlaced();
+}
+
+bool BadWords::GetIsSomeOneOnme(int i)
+{
+	if (isSomeoneOnMe[i] >= 0) { return true; }
+	return false;
+}
+
 std::vector<SDL_Rect> BadWords::GetLetterRects()
 {
 	std::vector<SDL_Rect> n;
@@ -53,22 +100,16 @@ std::vector<SDL_Rect> BadWords::GetLetterRects()
 	return n;
 }
 
-std::vector<bool*> BadWords::GetIsFollowingPlayer()
+std::vector<SDL_Rect> BadWords::GetLetterHolderRects()
 {
-	std::vector<bool*> f;
-	for (int i = 0; i < letters.size(); i++) {		
-		f.push_back(letters[i]->GetIsFollowingPlayer());
-	}
-	return f;
+	return letterHolder;
 }
 
-std::vector<bool*> BadWords::GetIsFalling()
+void BadWords::startNextWord()
 {
-	std::vector<bool*> f;
-	for (int i = 0; i < letters.size(); i++) {
-		f.push_back(letters[i]->GetIsFalling());
+	if (safeWords.contains(FormatWord())) {
+		std::cout << "made safe word" << std::endl;
 	}
-	return f;
 }
 
 bool BadWords::Init(const int* width)
@@ -83,7 +124,7 @@ bool BadWords::Init(const int* width)
 	return true;
 }
 
-void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect* playerRect, bool* h, float* posy)
+void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect r)
 {
 	if (SDL_GetTicks() > timer && !fall) {
 		fall = true;
@@ -93,74 +134,10 @@ void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect* 
 	}
 
 	for(int i = 0; i < letters.size(); i++){
-		letters[i]->update(width, height, dt, *playerRect);
+		letters[i]->update(width, height, dt, r);
 	}
 
-	if (SDL_GetTicks() > timer + 500 && fall) {
-		for (int i = 0; i < letters.size(); i++) {
-			for (int j = 0; j < letterHolder.size(); j++) {
-				if (letters[i]->GetPlaced() && *(letters[i]->GetIsFollowingPlayer())) {
-					letters[i]->SetFollowPlayer(false);
-					letters[i]->SetPlaced(false);
-					letters[i]->SetLocation(startingLocations[i][0], 400 - letters[i]->GetRect().h);
-					letters[j]->SetFollowPlayer(false);
-					letters[j]->SetPlaced(false);
-					letters[j]->SetLocation(startingLocations[j][0], 400 - letters[j]->GetRect().h);
-					createdWord[i] = '_';
-					createdWord[j] = '_';
-#if _DEBUG
-					std::cout << createdWord << std::endl;
-#endif 						
-					*h = false;
-					*posy = 200;
-				}
-
-				//letter touches white rect placeholder
-				if (SDL_HasIntersection(letters[i]->GetRectP(), &letterHolder[j])) {					
-					if(!letters[i]->GetPlaced() && *(letters[i]->GetIsFollowingPlayer())) {
-						letters[i]->SetFollowPlayer(false);
-						letters[i]->SetLocation(startingLocations[j][0], startingLocations[j][1]);
-						letters[i]->SetPlaced(true);
-						createdWord[j] = currentWord[i];
-#if _DEBUG
-						std::cout << createdWord << std::endl;
-#endif 						
-						*h = false;
-						*posy = 200;
-						placedTimer = SDL_GetTicks() + 1000;
-					}		
-				}
-				
-			}			
-		}
-
-		//letter touches another letter
-		for (int i = 0; i < letters.size(); i++) {
-			for (int j = i + 1; j < letters.size(); j++) {
-				if (SDL_HasIntersection(letters[i]->GetRectP(), letters[j]->GetRectP())) {
-					if (letters[j]->GetPlaced() && letters[i]->GetPlaced()) {
-						letters[i]->SetFollowPlayer(false);
-						letters[i]->SetPlaced(false);
-						letters[i]->SetLocation(startingLocations[i][0], 400 - letters[i]->GetRect().h);
-						letters[j]->SetFollowPlayer(false);
-						letters[j]->SetPlaced(false);
-						letters[j]->SetLocation(startingLocations[j][0], 400 - letters[j]->GetRect().h);
-						createdWord[i] = '_';
-						createdWord[j] = '_';
-#if _DEBUG
-						std::cout << createdWord << std::endl;
-#endif 		
-					}
-					else if(*(letters[j]->GetIsFollowingPlayer()) && *(letters[i]->GetIsFollowingPlayer())){
-						letters[i]->SetFollowPlayer(false);
-						letters[i]->SetPlaced(false);
-						letters[i]->SetLocation(startingLocations[i][0], 400 - letters[i]->GetRect().h);
-					}
-
-				}
-			}
-		}
-	}
+	startNextWord();
 }
 
 void BadWords::Draw(SDL_Renderer* r)

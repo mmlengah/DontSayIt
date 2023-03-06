@@ -77,8 +77,9 @@ bool Game::KeepAlive()
 void Game::Update()
 {
 	deltaTime = SetDeltaTime();
-	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime, bw->GetLetterRects(), bw->GetIsFollowingPlayer(), bw->GetIsFalling());
-	bw->Update(&SCREEN_WIDTH, &SCREEN_HEIGHT, &deltaTime, p->GetRect(), p->GetHolding(), p->GetPosY());
+	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime);
+	bw->Update(&SCREEN_WIDTH, &SCREEN_HEIGHT, &deltaTime, p->GetRect());
+	Collisions();
 }
 
 void Game::Draw()
@@ -137,5 +138,41 @@ bool Game::QuitButton(SDL_Event* e)
 		return false;
 	}
 	return true;
+}
+
+void Game::Collisions()
+{
+	//if player touches a letter
+	std::vector<SDL_Rect> letterRects = bw->GetLetterRects();
+	for (int i = 0; i < letterRects.size(); i++) {
+		if (p->GetHolding()) {	break; }
+		if (bw->IsLetterPlaced(i)) { continue; }
+		SDL_Rect playerRect = p->GetRect();
+		if (SDL_HasIntersection(&letterRects[i], &playerRect)) {		
+			p->collidedWithLetter();
+			bw->LetterCollidedWithPlayer(i);
+		}
+	}
+
+	//if letter touches letter holder
+	std::vector<SDL_Rect> letterHolderRects = bw->GetLetterHolderRects();
+	for (int i = 0; i < letterRects.size(); i++) {
+		for (int j = 0; j < letterHolderRects.size(); j++) {
+			//if you can place words and there are colliding
+			if (!bw->GetIsSomeOneOnme(j) && !bw->IsLetterPlaced(i) && bw->CanPlaceWords() && SDL_HasIntersection(&letterRects[i], &letterHolderRects[j])) {
+				bw->LetterCollidedWithHolder(i, j);
+				p->StopHolding();
+			}			
+		}		
+	}
+
+	//player collides with rect
+	for (int i = 0; i < letterHolderRects.size(); i++) {
+		//if player touches rect 
+		SDL_Rect playerRect = p->GetRect();
+		if (bw->GetIsSomeOneOnme(i) && SDL_HasIntersection(&letterHolderRects[i], &playerRect)) {
+			bw->SendLetterBack(i);
+		}
+	}
 }
 

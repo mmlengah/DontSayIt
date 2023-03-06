@@ -20,6 +20,7 @@ private:
 	float SetDeltaTime();
 	bool EventHandler();
 	bool QuitButton(SDL_Event* e);
+	void Collisions();
 
 	SDL_Window* window = nullptr;
 	SDL_Surface* screenSurface = nullptr;

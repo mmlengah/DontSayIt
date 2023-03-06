@@ -43,11 +43,6 @@ SDL_Rect Letter::GetRect()
 	return letterRect;
 }
 
-SDL_Rect* Letter::GetRectP()
-{
-	return &letterRect;
-}
-
 void Letter::SetFollowPlayer(bool b)
 {
 	isFollowPlayer = b;
@@ -84,29 +79,16 @@ void Letter::FollowPlayer(SDL_Rect r)
 	letterRect.y = r.y - 30;
 }
 
-void Letter::Collision(SDL_Rect r)
+void Letter::CollidedWithPlayer()
 {
-	if (isFollowPlayer) { return; }
-	if (SDL_HasIntersection(&letterRect, &r)) {
-		isFollowPlayer = true;
-		isFalling = false;
-	}
+	isFollowPlayer = true;
+	isFalling = false;
 }
 
 void Letter::SetLocation(int x, int y)
 {
 	letterRect.x = x;
 	letterRect.y = y;
-}
-
-bool* Letter::GetIsFollowingPlayer()
-{
-	return &isFollowPlayer;
-}
-
-bool* Letter::GetIsFalling()
-{
-	return &isFalling;
 }
 
 void Letter::SetPlaced(bool b)
