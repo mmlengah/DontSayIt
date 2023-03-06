@@ -19,6 +19,7 @@ void BadWords::SetUpWord(const int* width)
 	currentWord = swearWords.begin()->first;
 	int dist = (int) (*width / currentWord.size());
 	for (int i = 0; i < currentWord.size(); i++) {
+		createdWord += "_";
 		startingLocations.push_back({ i * dist, 0 });
 		letters.push_back(new Letter(i * dist, 0, 1 * dist, (int)(dist / 1.5)));
 		SDL_Rect tempRect{};
@@ -29,6 +30,7 @@ void BadWords::SetUpWord(const int* width)
 		letterHolder.push_back(tempRect);
 	}
 	now = SDL_GetTicks();
+	placedTimer = SDL_GetTicks();
 	timer = now + 2000; //add 2 seconds
 }
 
@@ -81,7 +83,7 @@ bool BadWords::Init(const int* width)
 	return true;
 }
 
-void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect playerRect, bool* h)
+void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect* playerRect, bool* h, float* posy)
 {
 	if (SDL_GetTicks() > timer && !fall) {
 		fall = true;
@@ -91,33 +93,74 @@ void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect p
 	}
 
 	for(int i = 0; i < letters.size(); i++){
-		letters[i]->update(width, height, dt, playerRect);
+		letters[i]->update(width, height, dt, *playerRect);
 	}
 
 	if (SDL_GetTicks() > timer + 500 && fall) {
 		for (int i = 0; i < letters.size(); i++) {
 			for (int j = 0; j < letterHolder.size(); j++) {
-				if (SDL_HasIntersection(letters[i]->GetRectP(), &letterHolder[j])) {
+				if (letters[i]->GetPlaced() && *(letters[i]->GetIsFollowingPlayer())) {
 					letters[i]->SetFollowPlayer(false);
-					letters[i]->SetLocation(startingLocations[j][0], startingLocations[j][1]);
+					letters[i]->SetPlaced(false);
+					letters[i]->SetLocation(startingLocations[i][0], 400 - letters[i]->GetRect().h);
+					letters[j]->SetFollowPlayer(false);
+					letters[j]->SetPlaced(false);
+					letters[j]->SetLocation(startingLocations[j][0], 400 - letters[j]->GetRect().h);
+					createdWord[i] = '_';
+					createdWord[j] = '_';
+#if _DEBUG
+					std::cout << createdWord << std::endl;
+#endif 						
 					*h = false;
+					*posy = 200;
 				}
-			}
-			
+
+				//letter touches white rect placeholder
+				if (SDL_HasIntersection(letters[i]->GetRectP(), &letterHolder[j])) {					
+					if(!letters[i]->GetPlaced() && *(letters[i]->GetIsFollowingPlayer())) {
+						letters[i]->SetFollowPlayer(false);
+						letters[i]->SetLocation(startingLocations[j][0], startingLocations[j][1]);
+						letters[i]->SetPlaced(true);
+						createdWord[j] = currentWord[i];
+#if _DEBUG
+						std::cout << createdWord << std::endl;
+#endif 						
+						*h = false;
+						*posy = 200;
+						placedTimer = SDL_GetTicks() + 1000;
+					}		
+				}
+				
+			}			
 		}
 
+		//letter touches another letter
 		for (int i = 0; i < letters.size(); i++) {
 			for (int j = i + 1; j < letters.size(); j++) {
 				if (SDL_HasIntersection(letters[i]->GetRectP(), letters[j]->GetRectP())) {
-					letters[i]->SetLocation(startingLocations[i][0], 400 - letters[i]->GetRect().h);
-					*h = false;
+					if (letters[j]->GetPlaced() && letters[i]->GetPlaced()) {
+						letters[i]->SetFollowPlayer(false);
+						letters[i]->SetPlaced(false);
+						letters[i]->SetLocation(startingLocations[i][0], 400 - letters[i]->GetRect().h);
+						letters[j]->SetFollowPlayer(false);
+						letters[j]->SetPlaced(false);
+						letters[j]->SetLocation(startingLocations[j][0], 400 - letters[j]->GetRect().h);
+						createdWord[i] = '_';
+						createdWord[j] = '_';
+#if _DEBUG
+						std::cout << createdWord << std::endl;
+#endif 		
+					}
+					else if(*(letters[j]->GetIsFollowingPlayer()) && *(letters[i]->GetIsFollowingPlayer())){
+						letters[i]->SetFollowPlayer(false);
+						letters[i]->SetPlaced(false);
+						letters[i]->SetLocation(startingLocations[i][0], 400 - letters[i]->GetRect().h);
+					}
+
 				}
 			}
 		}
 	}
-
-	
-
 }
 
 void BadWords::Draw(SDL_Renderer* r)
@@ -154,4 +197,23 @@ void BadWords::ReadFile(const char* filepath, std::unordered_map<std::string, st
 
 		file.close();
 	}
+}
+
+std::string BadWords::FormatWord()
+{
+	std::string o;
+	bool started = false;
+	for (int i = 0; i < createdWord.size(); i++) {
+		if (createdWord[i] != '_' && !started) {
+			started = true;
+			o += createdWord[i];
+		}
+		else if (createdWord[i] != '_') {
+			o += createdWord[i];
+		}
+		else if (createdWord[i] == '_' && started) {
+			break;
+		}
+	}
+	return o;
 }

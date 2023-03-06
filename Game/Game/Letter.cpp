@@ -108,3 +108,13 @@ bool* Letter::GetIsFalling()
 {
 	return &isFalling;
 }
+
+void Letter::SetPlaced(bool b)
+{
+	placed = b;
+}
+
+bool Letter::GetPlaced()
+{
+	return placed;
+}

@@ -14,7 +14,8 @@ public:
 	void Update(int width, int height, float* dt, std::vector<SDL_Rect> letterRects, std::vector<bool*> isFollowPlayer, std::vector<bool*> isFalling);
 	void PlayerKeyDown(SDL_Event* e);
 	void PlayerKeyUp(SDL_Event* e);
-	SDL_Rect GetRect();
+	SDL_Rect* GetRect();
+	float* GetPosY();
 	bool* GetHolding();
 private:
 	//functions

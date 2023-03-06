@@ -106,9 +106,14 @@ void Player::PlayerKeyUp(SDL_Event* e)
 	}
 }
 
-SDL_Rect Player::GetRect()
+SDL_Rect* Player::GetRect()
 {
-	return playerRect;
+	return &playerRect;
+}
+
+float* Player::GetPosY()
+{
+	return &position.y;
 }
 
 bool* Player::GetHolding()

@@ -1,6 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include <string>
 
 class Letter
 {
@@ -16,15 +17,17 @@ public:
 	void SetLocation(int x, int y);
 	bool* GetIsFollowingPlayer();
 	bool* GetIsFalling();
+	void SetPlaced(bool b);
+	bool GetPlaced();
 private:	
 	void Falling(const int* width, const int* height, float* dt);
 	void FollowPlayer(SDL_Rect r);
 	
-
 	SDL_Color white;
 	SDL_Rect letterRect;
 	float speed;
 	bool isFollowPlayer = false;
 	bool isFalling;
+	bool placed = false;
 };
 

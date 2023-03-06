@@ -78,7 +78,7 @@ void Game::Update()
 {
 	deltaTime = SetDeltaTime();
 	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime, bw->GetLetterRects(), bw->GetIsFollowingPlayer(), bw->GetIsFalling());
-	bw->Update(&SCREEN_WIDTH, &SCREEN_HEIGHT, &deltaTime, p->GetRect(), p->GetHolding());
+	bw->Update(&SCREEN_WIDTH, &SCREEN_HEIGHT, &deltaTime, p->GetRect(), p->GetHolding(), p->GetPosY());
 }
 
 void Game::Draw()
