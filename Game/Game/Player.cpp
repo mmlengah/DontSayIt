@@ -5,7 +5,7 @@
 
 Player::Player(int width, int height)
 {
-	speed = 0.2f;
+	speed = 0.3f;
 	position = util::Vector2(0, (float) height);
 	
 	playerRect.x = (int) position.x;
@@ -62,18 +62,30 @@ void Player::PlayerKeyDown(SDL_Event* e)
 	switch (e->key.keysym.scancode) {
 	case SDL_SCANCODE_UP:
 	case SDL_SCANCODE_W:
+#if _DEBUG
+		std::cout << "up arrow / W pressed" << std::endl;
+#endif // DEBUG
 		keyStates[0] = true;
 		break;
 	case SDL_SCANCODE_DOWN:
 	case SDL_SCANCODE_S:
+#if _DEBUG
+		std::cout << "down arrow / S pressed" << std::endl;
+#endif // DEBUG
 		keyStates[1] = true;
 		break;
 	case SDL_SCANCODE_LEFT:
 	case SDL_SCANCODE_A:
+#if _DEBUG
+		std::cout << "left arrow / A pressed" << std::endl;
+#endif // DEBUG
 		keyStates[2] = true;
 		break;
 	case SDL_SCANCODE_RIGHT:
 	case SDL_SCANCODE_D:
+#if _DEBUG
+		std::cout << "right arrow / D pressed" << std::endl;
+#endif // DEBUG
 		keyStates[3] = true;
 		break;
 	}
@@ -88,17 +100,29 @@ void Player::PlayerKeyUp(SDL_Event* e)
 	case SDL_SCANCODE_UP:
 	case SDL_SCANCODE_W:
 		keyStates[0] = false;
+#if _DEBUG
+		std::cout << "up arrow / W released" << std::endl;
+#endif // DEBUG
 		break;
 	case SDL_SCANCODE_DOWN:
 	case SDL_SCANCODE_S:
 		keyStates[1] = false;
+#if _DEBUG
+		std::cout << "down arrow / S released" << std::endl;
+#endif // DEBUG
 		break;
 	case SDL_SCANCODE_LEFT:
 	case SDL_SCANCODE_A:
 		keyStates[2] = false;
+#if _DEBUG
+		std::cout << "left arrow / A released" << std::endl;
+#endif // DEBUG
 		break;
 	case SDL_SCANCODE_RIGHT:
 	case SDL_SCANCODE_D:
+#if _DEBUG
+		std::cout << "right arrow / D released" << std::endl;
+#endif // DEBUG
 		keyStates[3] = false;
 		break;
 	}
@@ -152,6 +176,8 @@ void Player::Movement(int width, int height, float* dt)
 {
 	//move player
 	if (keyStates[0]) {
+
+
 		position.y -= speed * *dt;
 	}
 	if (keyStates[1]) {
