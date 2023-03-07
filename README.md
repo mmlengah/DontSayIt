@@ -4,6 +4,7 @@ Game is rated PGEI12 due to explict language.<br />
 Game involves rearranging swear words to create approved words.<br />
 swear words that involve sexisum, racism, transphobic or homophobic language are not included.<br />
 Made by Matthius Mlengah, Ethan Cleaver, and Paul Hawkins<br />
+Key Tester: Rowan Noble
 
 ## How to download
 Click releases on the right side of the screen<br />
