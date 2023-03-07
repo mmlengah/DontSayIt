@@ -27,7 +27,7 @@ void Letter::draw(SDL_Renderer* r, TTF_Font* font, const char* letter)
 	SDL_FreeSurface(textImage);
 }
 
-void Letter::update(const int* width, const int* height, float* dt, SDL_Rect r)
+void Letter::update(const int* width, const int* height, double* dt, SDL_Rect r)
 {
 	Falling(width, height, dt);
 	FollowPlayer(r);
@@ -48,7 +48,7 @@ void Letter::SetFollowPlayer(bool b)
 	isFollowPlayer = b;
 }
 
-void Letter::Falling(const int* width, const int* height, float* dt)
+void Letter::Falling(const int* width, const int* height, double* dt)
 {
 	if (!isFalling) { return; }
 	letterRect.y += (int) (speed * *dt);

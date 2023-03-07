@@ -11,7 +11,7 @@ public:
 	~Player();
 	bool init(SDL_Renderer* r);
 	void Draw(SDL_Renderer* r);
-	void Update(int width, int height, float* dt);
+	void Update(int width, int height, double* dt);
 	void PlayerKeyDown(SDL_Event* e);
 	void PlayerKeyUp(SDL_Event* e);
 	SDL_Rect GetRect();
@@ -19,10 +19,11 @@ public:
 	bool GetHolding();
 	void StopHolding();
 	void collidedWithLetter();
+	void Reset();
 private:
 	//functions
 	void Animation();
-	void Movement(int width, int height, float* dt);
+	void Movement(int width, int height, double* dt);
 
 	//variables
 	bool holding = false;

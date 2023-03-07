@@ -8,9 +8,10 @@ const int SCREEN_HEIGHT = 400;
 
 Game::Game()
 {
-	srand((unsigned int)time(NULL));
+	//srand((unsigned int)time(NULL));
 	p = new Player(SCREEN_WIDTH, SCREEN_HEIGHT);
 	bw = new BadWords();
+	am = new AudioManager();
 }
 
 bool Game::Init()
@@ -60,6 +61,8 @@ bool Game::Init()
 	//init the player
 	p->init(renderer);
 	bw->Init(&SCREEN_WIDTH);
+	am->init();
+	am->playBackgroundMusic();
 
 	Uint64 NOW = SDL_GetPerformanceCounter();
 	Uint64 LAST = 0;
@@ -78,8 +81,12 @@ void Game::Update()
 {
 	deltaTime = SetDeltaTime();
 	p->Update(SCREEN_WIDTH, SCREEN_HEIGHT, &deltaTime);
-	bw->Update(&SCREEN_WIDTH, &SCREEN_HEIGHT, &deltaTime, p->GetRect());
+	bw->Update(&SCREEN_WIDTH, &SCREEN_HEIGHT, &deltaTime, p->GetRect(), am);
 	Collisions();
+
+	if (bw->StartNextLevel(&SCREEN_WIDTH)) {
+		p->Reset();
+	}
 }
 
 void Game::Draw()
@@ -104,11 +111,11 @@ void Game::Clean()
 	SDL_Quit();
 }
 
-float Game::SetDeltaTime()
+double Game::SetDeltaTime()
 {
 	LAST = NOW;
 	NOW = SDL_GetPerformanceCounter();
-	return (float)((NOW - LAST) * 1000 / (float)SDL_GetPerformanceFrequency());
+	return (double)((NOW - LAST) * 1000 / (double)SDL_GetPerformanceFrequency());
 }
 
 bool Game::EventHandler()
@@ -148,7 +155,8 @@ void Game::Collisions()
 		if (p->GetHolding()) {	break; }
 		if (bw->IsLetterPlaced(i)) { continue; }
 		SDL_Rect playerRect = p->GetRect();
-		if (SDL_HasIntersection(&letterRects[i], &playerRect)) {		
+		if (SDL_HasIntersection(&letterRects[i], &playerRect)) {
+			am->PlayPickUp();
 			p->collidedWithLetter();
 			bw->LetterCollidedWithPlayer(i);
 		}
@@ -171,7 +179,8 @@ void Game::Collisions()
 		//if player touches rect 
 		SDL_Rect playerRect = p->GetRect();
 		if (bw->GetIsSomeOneOnme(i) && SDL_HasIntersection(&letterHolderRects[i], &playerRect)) {
-			bw->SendLetterBack(i);
+			am->PlayDroppedItem();
+			bw->SendLetterBack(i);			
 		}
 	}
 }

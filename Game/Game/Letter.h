@@ -7,7 +7,7 @@ class Letter
 {
 public:
 	Letter(int x, int y, int w, int h);
-	void update(const int* width, const int* height, float* dt, SDL_Rect r);
+	void update(const int* width, const int* height, double* dt, SDL_Rect r);
 	void draw(SDL_Renderer* r, TTF_Font* font, const char* letter);
 	void SetFalling(bool f);
 	SDL_Rect GetRect();
@@ -17,7 +17,7 @@ public:
 	void SetPlaced(bool b);
 	bool GetPlaced();
 private:	
-	void Falling(const int* width, const int* height, float* dt);
+	void Falling(const int* width, const int* height, double* dt);
 	void FollowPlayer(SDL_Rect r);
 	
 	SDL_Color white;

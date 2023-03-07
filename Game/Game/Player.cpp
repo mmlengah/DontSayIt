@@ -52,7 +52,7 @@ void Player::Draw(SDL_Renderer* r)
 	SDL_RenderCopy(r, textures[animationFrame], NULL, &playerRect);
 }
 
-void Player::Update(int width, int height, float* dt)
+void Player::Update(int width, int height, double* dt)
 {
 	Movement(width, height, dt);
 }
@@ -156,6 +156,12 @@ void Player::collidedWithLetter()
 	animationFrame = 4;
 }
 
+void Player::Reset()
+{
+	position.y = 400;
+	holding = false;
+}
+
 void Player::Animation()
 {
 	//arms down = 0, 1, 2, 3;
@@ -172,22 +178,20 @@ void Player::Animation()
 	}
 }
 
-void Player::Movement(int width, int height, float* dt)
+void Player::Movement(int width, int height, double* dt)
 {
 	//move player
 	if (keyStates[0]) {
-
-
-		position.y -= speed * *dt;
+		position.y -= (float) (speed * *dt);
 	}
 	if (keyStates[1]) {
-		position.y += speed * *dt;
+		position.y += (float)(speed * *dt);
 	}
 	if (keyStates[2]) {
-		position.x -= speed * *dt;
+		position.x -= (float)(speed * *dt);
 	}
 	if (keyStates[3]) {
-		position.x += speed * *dt;
+		position.x += (float)(speed * *dt);
 	}
 
 	if (keyStates[3] || keyStates[2] || keyStates[1] || keyStates[0]) {
@@ -195,7 +199,6 @@ void Player::Movement(int width, int height, float* dt)
 		Animation();
 	}
 
-	
 	playerRect.x = (int)position.x;
 	playerRect.y = (int)position.y;
 

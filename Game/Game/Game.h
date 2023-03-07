@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "Letter.h"
 #include "BadWords.h"
+#include "AudioManager.h"
 
 class Game
 {
@@ -17,7 +18,7 @@ public:
 	void Draw();	
 	void Clean();
 private:
-	float SetDeltaTime();
+	double SetDeltaTime();
 	bool EventHandler();
 	bool QuitButton(SDL_Event* e);
 	void Collisions();
@@ -28,10 +29,11 @@ private:
 	
 	Uint64 NOW = 0;
 	Uint64 LAST = 0;
-	float deltaTime = 0;
+	double deltaTime = 0;
 
 	Player* p;
 	BadWords* bw;
+	AudioManager* am;
 
 };
 

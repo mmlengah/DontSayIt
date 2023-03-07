@@ -2,11 +2,22 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <iterator>
 
 BadWords::BadWords()
 {
 	ReadFile("Assets/SwearWords/SafeWords.txt", &safeWords);
-	ReadFile("Assets/SwearWords/swearWords.txt", &swearWords);
+	ReadFile("Assets/SwearWords/badWords.txt", &ourSwearWords);
+	otherSwearWords = ourSwearWords;
+	otherSwearWords["COCK"] = "COCK";
+	otherSwearWords["FUCK"] = "FUCK";
+	otherSwearWords["FUCKERS"] = "FUCKERS";
+	otherSwearWords["FUCKER"] = "FUCKER";
+
+	for (auto const& x : ourSwearWords)
+	{
+		ourSwearWordsVector.push_back(x.second);
+	}
 }
 
 BadWords::~BadWords()
@@ -16,7 +27,14 @@ BadWords::~BadWords()
 
 void BadWords::SetUpWord(const int* width)
 {	
-	currentWord = swearWords.begin()->first;
+	playedSafe = false;
+	startingLocations = {};
+	letterHolder = {};
+	isSomeoneOnMe = {};
+	startingLocations = {};
+	currentWord = "";
+	createdWord = "";
+	currentWord = ourSwearWordsVector[rand() % ourSwearWordsVector.size()];
 	int dist = (int) (*width / currentWord.size());
 	for (int i = 0; i < currentWord.size(); i++) {
 		createdWord += "_";
@@ -33,6 +51,7 @@ void BadWords::SetUpWord(const int* width)
 	now = SDL_GetTicks();
 	placedTimer = SDL_GetTicks();
 	timer = now + 2000; //add 2 seconds
+	fall = false;
 }
 
 void BadWords::RemoveWord()
@@ -57,6 +76,7 @@ void BadWords::LetterCollidedWithHolder(int i, int j)
 	letters[i]->SetPlaced(true);
 	isSomeoneOnMe[j] = i;
 	createdWord[j] = currentWord[i];
+	playedSafe = false;
 #if _DEBUG
 	std::cout << createdWord << std::endl;
 #endif 						
@@ -70,6 +90,7 @@ void BadWords::SendLetterBack(int i)
 	letters[j]->SetLocation(startingLocations[j][0], 400 - letters[j]->GetRect().h);
 	isSomeoneOnMe[i] = -1;
 	createdWord[i] = '_';
+	playedSafe = false;
 #if _DEBUG
 	std::cout << createdWord << std::endl;
 #endif 		
@@ -91,6 +112,15 @@ bool BadWords::GetIsSomeOneOnme(int i)
 	return false;
 }
 
+bool BadWords::StartNextLevel(const int* width)
+{
+	if (playedSafe && changeWordTimer < SDL_GetTicks()) {		
+		RemoveWord();
+		SetUpWord(width);
+	}
+	return (playedSafe && changeWordTimer < SDL_GetTicks());
+}
+
 std::vector<SDL_Rect> BadWords::GetLetterRects()
 {
 	std::vector<SDL_Rect> n;
@@ -105,10 +135,15 @@ std::vector<SDL_Rect> BadWords::GetLetterHolderRects()
 	return letterHolder;
 }
 
-void BadWords::startNextWord()
+void BadWords::startNextWord(AudioManager* am)
 {
-	if (safeWords.contains(FormatWord())) {
-		std::cout << "made safe word" << std::endl;
+	if (ourSwearWords.contains(FormatWord()) || otherSwearWords.contains(FormatWord())) {
+		am->playBetterBackgroundMusic();
+	}
+	else if (safeWords.contains(FormatWord()) && !playedSafe) {		
+		am->PlayOkWord();
+		playedSafe = true;
+		changeWordTimer = SDL_GetTicks() + 5000;//5 second timer
 	}
 }
 
@@ -124,7 +159,7 @@ bool BadWords::Init(const int* width)
 	return true;
 }
 
-void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect r)
+void BadWords::Update(const int* width, const int* height, double* dt, SDL_Rect r, AudioManager* am)
 {
 	if (SDL_GetTicks() > timer && !fall) {
 		fall = true;
@@ -137,7 +172,7 @@ void BadWords::Update(const int* width, const int* height, float* dt, SDL_Rect r
 		letters[i]->update(width, height, dt, r);
 	}
 
-	startNextWord();
+	startNextWord(am);
 }
 
 void BadWords::Draw(SDL_Renderer* r)
@@ -166,9 +201,6 @@ void BadWords::ReadFile(const char* filepath, std::unordered_map<std::string, st
 	if (file.is_open()) {
 		std::string line;
 		while (std::getline(file, line)) {
-			for (int i = 0; i < line.size(); i++) {
-				line[i] = std::toupper(line[i]);
-			}
 			(*words)[line] = line;
 		}
 
