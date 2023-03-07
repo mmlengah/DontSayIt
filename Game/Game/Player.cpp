@@ -7,11 +7,17 @@ Player::Player(int width, int height)
 {
 	speed = 0.3f;
 	position = util::Vector2(0, (float) height);
+
 	
 	playerRect.x = (int) position.x;
 	playerRect.y = (int) position.y;
 	playerRect.w = (int) (width * 0.1);
 	playerRect.h = (int) (height * 0.15);
+
+	if (position.y >= height - playerRect.h) {
+		position.y = (float)(height - playerRect.h);
+		playerRect.y = (int)position.y;
+	}
 
 	for (int i = 0; i < 8; i++) {
 		textures.push_back(nullptr);
@@ -57,75 +63,28 @@ void Player::Update(int width, int height, double* dt)
 	Movement(width, height, dt);
 }
 
-void Player::PlayerKeyDown(SDL_Event* e)
+void Player::PlayerMoveLeft(bool b)
 {
-	switch (e->key.keysym.scancode) {
-	case SDL_SCANCODE_UP:
-	case SDL_SCANCODE_W:
-#if _DEBUG
-		std::cout << "up arrow / W pressed" << std::endl;
-#endif // DEBUG
-		keyStates[0] = true;
-		break;
-	case SDL_SCANCODE_DOWN:
-	case SDL_SCANCODE_S:
-#if _DEBUG
-		std::cout << "down arrow / S pressed" << std::endl;
-#endif // DEBUG
-		keyStates[1] = true;
-		break;
-	case SDL_SCANCODE_LEFT:
-	case SDL_SCANCODE_A:
-#if _DEBUG
-		std::cout << "left arrow / A pressed" << std::endl;
-#endif // DEBUG
-		keyStates[2] = true;
-		break;
-	case SDL_SCANCODE_RIGHT:
-	case SDL_SCANCODE_D:
-#if _DEBUG
-		std::cout << "right arrow / D pressed" << std::endl;
-#endif // DEBUG
-		keyStates[3] = true;
-		break;
-	}
-
-	
-	
+	if (keyStates[2] == b) { return; }
+	keyStates[2] = b;
 }
 
-void Player::PlayerKeyUp(SDL_Event* e)
+void Player::PlayerMoveRight(bool b)
 {
-	switch (e->key.keysym.scancode) {
-	case SDL_SCANCODE_UP:
-	case SDL_SCANCODE_W:
-		keyStates[0] = false;
-#if _DEBUG
-		std::cout << "up arrow / W released" << std::endl;
-#endif // DEBUG
-		break;
-	case SDL_SCANCODE_DOWN:
-	case SDL_SCANCODE_S:
-		keyStates[1] = false;
-#if _DEBUG
-		std::cout << "down arrow / S released" << std::endl;
-#endif // DEBUG
-		break;
-	case SDL_SCANCODE_LEFT:
-	case SDL_SCANCODE_A:
-		keyStates[2] = false;
-#if _DEBUG
-		std::cout << "left arrow / A released" << std::endl;
-#endif // DEBUG
-		break;
-	case SDL_SCANCODE_RIGHT:
-	case SDL_SCANCODE_D:
-#if _DEBUG
-		std::cout << "right arrow / D released" << std::endl;
-#endif // DEBUG
-		keyStates[3] = false;
-		break;
-	}
+	if (keyStates[3] == b) { return; }
+	keyStates[3] = b;
+}
+
+void Player::PlayerMoveUp(bool b)
+{
+	if (keyStates[0] == b) { return; }
+	keyStates[0] = b;
+}
+
+void Player::PlayerMoveDown(bool b)
+{
+	if (keyStates[1] == b) { return; }
+	keyStates[1] = b;
 }
 
 SDL_Rect Player::GetRect()
@@ -159,6 +118,11 @@ void Player::collidedWithLetter()
 void Player::Reset()
 {
 	position.y = 400;
+	if (position.y >= 400 - playerRect.h) {
+		position.y = (float)(400 - playerRect.h);
+		playerRect.y = (int)position.y;
+	}
+	animationFrame = 0;
 	holding = false;
 }
 

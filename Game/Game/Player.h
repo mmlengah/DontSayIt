@@ -12,8 +12,10 @@ public:
 	bool init(SDL_Renderer* r);
 	void Draw(SDL_Renderer* r);
 	void Update(int width, int height, double* dt);
-	void PlayerKeyDown(SDL_Event* e);
-	void PlayerKeyUp(SDL_Event* e);
+	void PlayerMoveLeft(bool b);
+	void PlayerMoveRight(bool b);
+	void PlayerMoveUp(bool b);
+	void PlayerMoveDown(bool b);
 	SDL_Rect GetRect();
 	float* GetPosY();
 	bool GetHolding();

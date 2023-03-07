@@ -8,7 +8,7 @@ const int SCREEN_HEIGHT = 400;
 
 Game::Game()
 {
-	//srand((unsigned int)time(NULL));
+	srand((unsigned int)time(NULL));
 	p = new Player(SCREEN_WIDTH, SCREEN_HEIGHT);
 	bw = new BadWords();
 	am = new AudioManager();
@@ -126,24 +126,80 @@ bool Game::EventHandler()
 			return false;
 		}
 		else if (ev.type == SDL_KEYDOWN) {
-			p->PlayerKeyDown(&ev);
-			return QuitButton(&ev);
+			switch (ev.key.keysym.scancode) {
+				case SDL_SCANCODE_ESCAPE:
+					return false;
+					break;
+				case SDL_SCANCODE_UP:
+				case SDL_SCANCODE_W:
+#if _DEBUG
+				std::cout << "up arrow / W pressed" << std::endl;
+#endif // DEBUG
+					p->PlayerMoveUp(true);
+					break;
+				case SDL_SCANCODE_DOWN:
+				case SDL_SCANCODE_S:
+
+#if _DEBUG
+				std::cout << "down arrow / S pressed" << std::endl;
+#endif // DEBUG
+					p->PlayerMoveDown(true);
+					break;
+				case SDL_SCANCODE_LEFT:
+				case SDL_SCANCODE_A:
+
+#if _DEBUG
+				std::cout << "left arrow / A pressed" << std::endl;
+#endif // DEBUG
+					p->PlayerMoveLeft(true);
+					break;
+				case SDL_SCANCODE_RIGHT:
+				case SDL_SCANCODE_D:
+#if _DEBUG
+				std::cout << "right arrow / D pressed" << std::endl;
+#endif // DEBUG
+					p->PlayerMoveRight(true);
+					break;
+			}
+			return true;
 			
 		}
 		else if (ev.type == SDL_KEYUP) {
-			p->PlayerKeyUp(&ev);
+			switch (ev.key.keysym.scancode) {
+				case SDL_SCANCODE_UP:
+				case SDL_SCANCODE_W:
+#if _DEBUG
+				std::cout << "up arrow / W released" << std::endl;
+#endif // DEBUG
+					p->PlayerMoveUp(false);
+					break;
+				case SDL_SCANCODE_DOWN:
+				case SDL_SCANCODE_S:
+
+#if _DEBUG
+				std::cout << "down arrow / S released" << std::endl;
+#endif // DEBUG
+					p->PlayerMoveDown(false);
+					break;
+				case SDL_SCANCODE_LEFT:
+				case SDL_SCANCODE_A:
+
+#if _DEBUG
+				std::cout << "left arrow / A released" << std::endl;
+#endif // DEBUG
+					p->PlayerMoveLeft(false);
+					break;
+				case SDL_SCANCODE_RIGHT:
+				case SDL_SCANCODE_D:
+#if _DEBUG
+				std::cout << "right arrow / D released" << std::endl;
+#endif // DEBUG
+					p->PlayerMoveRight(false);
+					break;
+			}
 		}
 	}
 
-	return true;
-}
-
-bool Game::QuitButton(SDL_Event* e)
-{
-	switch (e->key.keysym.scancode) {
-	case SDL_SCANCODE_ESCAPE:
-		return false;
-	}
 	return true;
 }
 
