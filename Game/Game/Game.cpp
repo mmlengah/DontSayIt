@@ -133,15 +133,22 @@ bool Game::EventHandler()
 				case SDL_SCANCODE_UP:
 				case SDL_SCANCODE_W:
 #if _DEBUG
-				std::cout << "up arrow / W pressed" << std::endl;
+					if (!p->GetKeyStates(0)) {
+						std::cout << "up arrow / W pressed" << std::endl;
+					}
+				
 #endif // DEBUG
 					p->PlayerMoveUp(true);
+					
 					break;
 				case SDL_SCANCODE_DOWN:
 				case SDL_SCANCODE_S:
 
 #if _DEBUG
-				std::cout << "down arrow / S pressed" << std::endl;
+					if (!p->GetKeyStates(1)) {
+						std::cout << "down arrow / S pressed" << std::endl;
+					}
+				
 #endif // DEBUG
 					p->PlayerMoveDown(true);
 					break;
@@ -149,14 +156,19 @@ bool Game::EventHandler()
 				case SDL_SCANCODE_A:
 
 #if _DEBUG
-				std::cout << "left arrow / A pressed" << std::endl;
+					if (!p->GetKeyStates(2)) {
+						std::cout << "left arrow / A pressed" << std::endl;
+					}
+				
 #endif // DEBUG
 					p->PlayerMoveLeft(true);
 					break;
 				case SDL_SCANCODE_RIGHT:
 				case SDL_SCANCODE_D:
 #if _DEBUG
-				std::cout << "right arrow / D pressed" << std::endl;
+					if (!p->GetKeyStates(3)) {
+						std::cout << "right arrow / D pressed" << std::endl;
+					}				
 #endif // DEBUG
 					p->PlayerMoveRight(true);
 					break;

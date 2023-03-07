@@ -114,11 +114,13 @@ bool BadWords::GetIsSomeOneOnme(int i)
 
 bool BadWords::StartNextLevel(const int* width)
 {
+	bool b = false;
 	if (playedSafe && changeWordTimer < SDL_GetTicks()) {		
 		RemoveWord();
 		SetUpWord(width);
+		b = true;
 	}
-	return (playedSafe && changeWordTimer < SDL_GetTicks());
+	return b;
 }
 
 std::vector<SDL_Rect> BadWords::GetLetterRects()

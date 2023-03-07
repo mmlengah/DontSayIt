@@ -87,6 +87,11 @@ void Player::PlayerMoveDown(bool b)
 	keyStates[1] = b;
 }
 
+bool Player::GetKeyStates(int i)
+{
+	return keyStates[i];
+}
+
 SDL_Rect Player::GetRect()
 {
 	return playerRect;

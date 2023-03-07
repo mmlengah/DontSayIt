@@ -15,13 +15,14 @@ public:
 	void PlayerMoveLeft(bool b);
 	void PlayerMoveRight(bool b);
 	void PlayerMoveUp(bool b);
-	void PlayerMoveDown(bool b);
+	void PlayerMoveDown(bool b);	
 	SDL_Rect GetRect();
 	float* GetPosY();
 	bool GetHolding();
 	void StopHolding();
 	void collidedWithLetter();
 	void Reset();
+	bool GetKeyStates(int i);
 private:
 	//functions
 	void Animation();

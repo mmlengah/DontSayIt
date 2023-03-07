@@ -7,6 +7,7 @@ class Letter
 {
 public:
 	Letter(int x, int y, int w, int h);
+	~Letter();
 	void update(const int* width, const int* height, double* dt, SDL_Rect r);
 	void draw(SDL_Renderer* r, TTF_Font* font, const char* letter);
 	void SetFalling(bool f);

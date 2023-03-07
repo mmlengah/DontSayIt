@@ -17,6 +17,13 @@ Letter::Letter(int x, int y, int w, int h)
 	speed = (float) (rand() % 25 + 25) / 25;
 }
 
+Letter::~Letter()
+{
+	isFollowPlayer = false;
+	letterRect.x = 1000;
+	letterRect.y = 1000;
+}
+
 void Letter::draw(SDL_Renderer* r, TTF_Font* font, const char* letter)
 {
 	SDL_Surface* textImage = TTF_RenderText_Solid(font, letter, white);
