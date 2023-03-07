@@ -1,5 +1,7 @@
 #include "Letter.h"
 #include <cstdlib>
+#include <iostream>
+
 Letter::Letter(int x, int y, int w, int h)
 {
 	white.r = 255;
@@ -14,7 +16,8 @@ Letter::Letter(int x, int y, int w, int h)
 
 	isFalling = false;
 
-	speed = (float) (rand() % 25 + 25) / 25;
+	speed = 0.05f;
+	pos = util::Vector2((float)x, (float)y);
 }
 
 Letter::~Letter()
@@ -58,23 +61,28 @@ void Letter::SetFollowPlayer(bool b)
 void Letter::Falling(const int* width, const int* height, double* dt)
 {
 	if (!isFalling) { return; }
-	letterRect.y += (int) (speed * *dt);
+	pos.y += (float)(speed * *dt);
+	letterRect.y += (int) pos.y;
 
 	//left
-	if (letterRect.x <= 0) {
-		letterRect.x = 0;
+	if (letterRect.x < 0) {
+		pos.x = 0;
+		letterRect.x = (int) pos.x;
 	}
 	//top
-	if (letterRect.y <= 0) {
-		letterRect.y = 0;
+	if (letterRect.y < 0) {
+		pos.y = 0;
+		letterRect.y = (int) pos.y;
 	}
 	//right
-	if (letterRect.x >= *width - letterRect.w) {
-		letterRect.x = (int)(*width - letterRect.w);		
+	if (letterRect.x > *width - letterRect.w) {
+		pos.x = (float)(*width - letterRect.w);
+		letterRect.x = (int) pos.x;
 	}
 	//bottom
-	if (letterRect.y >= *height - letterRect.h) {
-		letterRect.y = (int)(*height - letterRect.h);
+	if (letterRect.y > *height - letterRect.h) {
+		pos.y = (float)(*height - letterRect.h);
+		letterRect.y = (int) pos.y;
 		isFalling = false;
 	}
 }

@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <SDL_image.h>
 
 namespace util {
 	//vector 2 struct

@@ -2,6 +2,7 @@
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <string>
+#include "utils.h"
 
 class Letter
 {
@@ -27,5 +28,6 @@ private:
 	bool isFollowPlayer = false;
 	bool isFalling;
 	bool placed = false;
+	util::Vector2 pos;
 };
 

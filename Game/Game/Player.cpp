@@ -173,19 +173,20 @@ void Player::Movement(int width, int height, double* dt)
 
 
 	//keep player in bounds
-	if (playerRect.x <= 0) {
+	if (playerRect.x < 0) {
 		playerRect.x = 0;
 		position.x = 0;		
 	}
-	if (playerRect.y <= 0) {
+	if (playerRect.y < 0) {
 		playerRect.y = 0;
 		position.y = 0;		
 	}
-	if (playerRect.x >= width - playerRect.w) {
+	if (playerRect.x > width - playerRect.w) {
+		
 		playerRect.x = (int) (width - playerRect.w);
 		position.x = (float) (width - playerRect.w);
 	}
-	if (playerRect.y >= height - playerRect.h) {
+	if (playerRect.y > height - playerRect.h) {
 		playerRect.y = (int)(height - playerRect.h);
 		position.y = (float)(height - playerRect.h);
 	}
