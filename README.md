@@ -21,7 +21,7 @@ Moving into a placed word will remove the word. <br />
 Move slowly to palce word to the top of the screen, moving too fast removes the word. <br />
 
 ## Bugs / issues
-Can't move on right on some devices cause unknown. <br />
-Player gets stuck at the top of the screen on some devices cause unknown. <br />
 loading time is abysmal. <br /> 
-Character gets stuck in holding position -> reset game. <br />
+Can't move on right on some devices cause known (Fixed in 1.1.2). <br />
+Player gets stuck at the top of the screen on some devices cause known (Fixed in 1.1.2). <br />
+Character gets stuck in holding position (Fixed in 1.0.1). <br />
