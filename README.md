@@ -1,5 +1,5 @@
 # DontSayIt
-Game for the longy game jam.<br />
+Game was made for the longy game jam 002: https://itch.io/jam/longy-jam-002/entries <br />
 Game is rated PGEI12 due to explict language.<br />
 Game involves rearanging swear words to create approved words.<br />
 swear words the involve sexisum, racism, transphobic or homophobic language are not included.<br />
